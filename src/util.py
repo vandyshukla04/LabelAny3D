@@ -448,6 +448,8 @@ COCO_CATEGORIES = {
     192: 'mountain-merged', 193: 'grass-merged', 194: 'dirt-merged', 195: 'paper-merged',
     196: 'food-other-merged', 197: 'building-other-merged', 198: 'rock-merged',
     199: 'wall-other-merged', 200: 'rug-merged',
+    # WildBox additions (not in COCO)
+    201: 'rhino',
 }
 
 

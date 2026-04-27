@@ -96,6 +96,8 @@ COCO_CATEGORIES = [
     {'supercategory': 'indoor', 'id': 151, 'name': 'teddy bear'},
     {'supercategory': 'indoor', 'id': 152, 'name': 'hair drier'},
     {'supercategory': 'indoor', 'id': 153, 'name': 'toothbrush'},
+    # WildBox additions (not in standard COCO)
+    {'supercategory': 'animal', 'id': 154, 'name': 'rhino'},
 ]
 
 # Build name to id mapping
