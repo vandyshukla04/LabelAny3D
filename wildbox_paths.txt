@@ -1,0 +1,12 @@
+# 10 frames spanning species/segments from WildBox.
+# Each must be a frame_NNNNNN.jpg with a sibling sam3_masks/ directory.
+/storage3/3DOM/vshukla/sam3/wd_data/wildbox/archive/data202602KElephants/WildBox_sam3-vggtv1_processed_unzipped/WildBox/DJI_20260227082115_0002_V/seg1/frame_000001.jpg
+/storage3/3DOM/vshukla/sam3/wd_data/wildbox/archive/202401KZebras/WildBox_sam3-vggtv1_processed_unzipped/WildBox/DJI_20240119123655_0001_V/seg1/frame_000847.jpg
+/storage3/3DOM/vshukla/sam3/wd_data/wildbox/archive/data2023KABRZebras/WildBox_sam3-vggtv1_processed_unzipped/WildBox/DJI_0144/seg3/frame_001210.jpg
+/storage3/3DOM/vshukla/sam3/wd_data/wildbox/archive/data202401KRhinos/WildBox_sam3-vggtv2_processed_unzipped/WildBox/DJI_20240119141513_0005_V/seg3/frame_004459.jpg
+/storage3/3DOM/vshukla/sam3/wd_data/wildbox/archive/data202401KGiraffes/WildBox_sam3-vggtv1_processed_unzipped/WildBox/DJI_20240118140539_0008_V/seg1/frame_000484.jpg
+/storage3/3DOM/vshukla/sam3/wd_data/wildbox/archive/data202502KRhinoCamiV2/WildBox_sam3-vggtv1_processed_unzipped/WildBox_v2/DJI_20250218175311_0031_D/seg2/frame_001213.jpg
+/storage3/3DOM/vshukla/sam3/wd_data/wildbox/archive/dataBZS/WildBox_sam3-vggtv1_processed_unzipped/WildBox/DJI_20230607092838_0003_V/seg2/frame_000607.jpg
+/storage3/3DOM/vshukla/sam3/wd_data/wildbox/archive/data202502KRhinoCamiV1/WildBox_sam3-vggtv1_processed_unzipped/WildBox/DJI_20250303174548_0001_D/seg2/frame_001801.jpg
+/storage3/3DOM/vshukla/sam3/wd_data/wildbox/archive/data202602KElephants/WildBox_sam3-vggtv1_processed_unzipped/WildBox/DJI_20260227084135_0002_V/seg3/frame_002217.jpg
+/storage3/3DOM/vshukla/sam3/wd_data/wildbox/archive/data202602KElephants/WildBox_sam3-vggtv1_processed_unzipped/WildBox/DJI_20260227084135_0002_V/seg7/frame_005865.jpg
