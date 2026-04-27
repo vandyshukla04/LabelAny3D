@@ -39,20 +39,51 @@ CATEGORY_NAME_TO_ID = {
 }
 
 
-def find_seg_dir(frame_path):
+def find_mask_root(frame_path):
+    """
+    Returns (mask_root, metadata_json_path) where:
+      - mask_root is the directory containing obj_<i>/ subdirs
+      - metadata_json_path holds the text_prompt for the category
+
+    Two layouts seen in WildBox:
+      A) <seg>/sam3_masks/{metadata.json, masks/obj_<i>/}
+      B) <seg>/sam3_masks/<category>/{metadata.json, masks/obj_<i>/}
+    """
     seg = frame_path.parent
-    meta = seg / "sam3_masks" / "metadata.json"
-    if not meta.exists():
-        raise FileNotFoundError(f"No sam3_masks/metadata.json next to {frame_path}")
-    return seg
+    sam3 = seg / "sam3_masks"
+    if not sam3.is_dir():
+        raise FileNotFoundError(f"No sam3_masks/ next to {frame_path}")
+
+    # Layout A: flat
+    flat_meta = sam3 / "metadata.json"
+    flat_masks = sam3 / "masks"
+    if flat_meta.exists() and flat_masks.is_dir():
+        return flat_masks, flat_meta
+
+    # Layout B: nested under <category>/
+    candidates = [
+        d for d in sam3.iterdir()
+        if d.is_dir() and (d / "metadata.json").exists() and (d / "masks").is_dir()
+    ]
+    if len(candidates) == 1:
+        return candidates[0] / "masks", candidates[0] / "metadata.json"
+    if len(candidates) > 1:
+        raise ValueError(
+            f"Ambiguous nested sam3_masks layout under {sam3}: "
+            f"found multiple category dirs {[c.name for c in candidates]}"
+        )
+    raise FileNotFoundError(
+        f"No metadata.json found at sam3_masks/metadata.json "
+        f"or sam3_masks/<category>/metadata.json under {sam3}"
+    )
 
 
-def get_category(seg_dir):
-    meta = json.loads((seg_dir / "sam3_masks" / "metadata.json").read_text())
+def get_category(meta_path):
+    meta = json.loads(meta_path.read_text())
     name = meta["text_prompt"].strip().lower()
     if name not in CATEGORY_NAME_TO_ID:
         raise ValueError(
-            f"Unknown category '{name}' from {seg_dir}. "
+            f"Unknown category '{name}' from {meta_path}. "
             f"Add it to CATEGORY_NAME_TO_ID here and to "
             f"src/util.py:COCO_CATEGORIES + src/tools/combine_results.py:COCO_CATEGORIES."
         )
@@ -114,8 +145,8 @@ def main():
             continue
 
         try:
-            seg_dir = find_seg_dir(frame_path)
-            cat_name, cat_id = get_category(seg_dir)
+            masks_root, meta_path = find_mask_root(frame_path)
+            cat_name, cat_id = get_category(meta_path)
         except (FileNotFoundError, ValueError) as e:
             print(f"[{idx:02d}] SKIP {frame_path}: {e}", file=sys.stderr)
             skipped.append((idx, str(frame_path), str(e)))
@@ -143,7 +174,6 @@ def main():
             "height": H,
         })
 
-        masks_root = seg_dir / "sam3_masks" / "masks"
         n_added = 0
         for obj_dir in sorted(masks_root.glob("obj_*"), key=lambda p: int(p.name.split("_")[1])):
             mask_png = obj_dir / f"{stem}.png"
