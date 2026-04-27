@@ -106,13 +106,20 @@ def main():
     used_categories = {}
     ann_id = 1
 
+    skipped = []
     for idx, frame_path in enumerate(paths, start=1):
         if not frame_path.is_file():
             print(f"[{idx:02d}] SKIP missing file: {frame_path}", file=sys.stderr)
+            skipped.append((idx, str(frame_path), "file missing"))
             continue
 
-        seg_dir = find_seg_dir(frame_path)
-        cat_name, cat_id = get_category(seg_dir)
+        try:
+            seg_dir = find_seg_dir(frame_path)
+            cat_name, cat_id = get_category(seg_dir)
+        except (FileNotFoundError, ValueError) as e:
+            print(f"[{idx:02d}] SKIP {frame_path}: {e}", file=sys.stderr)
+            skipped.append((idx, str(frame_path), str(e)))
+            continue
         used_categories[cat_id] = cat_name
 
         stem = frame_path.stem
@@ -171,6 +178,10 @@ def main():
     out_path.write_text(json.dumps(out))
     print(f"\nWrote {len(images)} images, {len(annotations)} annotations -> {out_path}")
     print(f"Frames staged under {img_dir}")
+    if skipped:
+        print(f"\nSkipped {len(skipped)} frames:")
+        for idx, path, reason in skipped:
+            print(f"  [{idx:02d}] {reason}: {path}")
 
 
 if __name__ == "__main__":
