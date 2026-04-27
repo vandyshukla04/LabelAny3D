@@ -18,6 +18,9 @@ def main():
                     help="Output paths file (default: <seg_name>_paths.txt next to script)")
     ap.add_argument("--max", type=int, default=0,
                     help="If >0, take only the first N frames (sorted)")
+    ap.add_argument("--every", type=int, default=1,
+                    help="Stride: keep every Nth frame (default 1 = all). "
+                         "Example: --every 10 on a 110-frame segment yields ~11 frames.")
     args = ap.parse_args()
 
     seg = Path(args.seg_dir).resolve()
@@ -25,6 +28,8 @@ def main():
         raise SystemExit(f"Not a directory: {seg}")
 
     frames = sorted(seg.glob("frame_*.jpg"))
+    if args.every > 1:
+        frames = frames[::args.every]
     if args.max > 0:
         frames = frames[: args.max]
 
